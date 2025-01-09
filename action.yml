@@ -39,11 +39,14 @@ inputs:
   create:
     description: Create a Jira release.
     default: 'true'
-    required: false  
+    required: false
   dry_run:
     description: Perform only read actions and show the logs.
     default: 'false'
     required: false
+outputs:
+  release_id:
+    description: 'Id of the release, created or updated'
 
 runs:
   using: 'node20'

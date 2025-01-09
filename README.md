@@ -51,6 +51,11 @@ jobs:
 | archive | Mark Jira fix version as archived. Defaults to false. | No | Boolean |
 | tickets | Comma-separated list of Jira Issue Keys to include in the release. Defaults to ''. | No | String |
 
+### Outputs
+
+| Name | Description |
+|---|---|
+| release_id | Id of the release, created or updated |
 
 
 ## Reference

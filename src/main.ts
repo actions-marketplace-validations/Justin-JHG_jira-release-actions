@@ -1,4 +1,4 @@
-import { info, setFailed } from '@actions/core'
+import { info, setFailed, setOutput } from '@actions/core'
 import {
   EMAIL,
   API_TOKEN,
@@ -79,6 +79,7 @@ async function run(): Promise<void> {
 
         version = await api.createVersion(versionToCreate)
         info(DebugMessages.VERSION_CREATED(RELEASE_NAME))
+        setOutput('release_id', version.id)
       }
     } else {
       // update release and ignore ARCHIVE value
@@ -91,6 +92,7 @@ async function run(): Promise<void> {
       }
       version = await api.updateVersion(version.id, versionToUpdate)
       info(DebugMessages.VERSION_UPDATED(RELEASE_NAME))
+      setOutput('release_id', version.id)
     }
 
     // Assign JIRA issues to Release
