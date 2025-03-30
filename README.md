@@ -61,3 +61,5 @@ jobs:
 - [Repository the code was forked from](https://github.com/StalemateInc/jira-release-action)
 - [GitHub Actions: TypeScript Action](https://github.com/actions/typescript-action)
 - [Vercel NCC](https://github.com/vercel/ncc)
+- [ECMAScript module (ESM)](https://nodejs.org/api/esm.html)
+- [Rollup](https://rollupjs.org)
