@@ -1,6 +1,6 @@
 # Jira Release/Archive Action
 
-[![build-test](https://github.com/Justin-JHG/jira-release-actions/actions/workflows/test.yml/badge.svg)](https://github.com/Justin-JHG/jira-release-actions/actions/workflows/test.yml)
+[![CI](https://github.com/Justin-JHG/jira-release-actions/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Justin-JHG/jira-release-actions/actions/workflows/ci.yml)
 
 This GitHub Action connects your CI and your Jira instance by creating release (Fix Version) and assigning Jira issues to the release as part of your CI process.
 
