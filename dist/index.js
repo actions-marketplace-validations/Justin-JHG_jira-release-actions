@@ -47432,10 +47432,13 @@ class API {
                 headers: this._headers(),
             });
         }
-        catch {
+        catch (error) {
             // If issue doesn't exist, return early without error
-            coreExports.debug(`Issue ${ticket_id} not found, skipping update`);
-            return null;
+            if (axios.isAxiosError(error) && error.response?.status === 404) {
+                coreExports.debug(`Issue ${ticket_id} not found, skipping update`);
+                return null;
+            }
+            throw error;
         }
         try {
             const response = await axios.put(`${this.domain}/rest/api/3/issue/${ticket_id}`, {
