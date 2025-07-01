@@ -105,8 +105,12 @@ export async function run(): Promise<void> {
         info(DebugMessages.UPDATING_TICKET(ticket));
 
         if (version?.id !== undefined) {
-          await api.updateIssue(ticket, version.id);
-          info(DebugMessages.TICKET_UPDATED(ticket, version.id));
+          const result = await api.updateIssue(ticket, version.id);
+          if (result.success) {
+            info(DebugMessages.TICKET_UPDATED(ticket, version.id));
+          } else {
+            info(`Failed to update ticket ${ticket}: ${result.error}`);
+          }
         }
       }
     }
