@@ -47424,28 +47424,10 @@ class API {
             throw toMoreDescriptiveError(error);
         }
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async updateIssue(ticket_id, version_id) {
         try {
-            // Check if issue exists first
-            await axios.get(`${this.domain}/rest/api/3/issue/${ticket_id}`, {
-                headers: this._headers(),
-            });
-        }
-        catch (error) {
-            // If issue doesn't exist, return early without error
-            if (axios.isAxiosError(error) && error.response?.status === 404) {
-                coreExports.debug(`Issue ${ticket_id} not found, skipping update`);
-                return { success: false, error: "Issue not found" };
-            }
-            // For other errors during issue check, also return gracefully
-            coreExports.debug(`Error checking issue ${ticket_id}: ${error}`);
-            return {
-                success: false,
-                error: `Error checking issue: ${error instanceof Error ? error.message : String(error)}`,
-            };
-        }
-        try {
-            await axios.put(`${this.domain}/rest/api/3/issue/${ticket_id}`, {
+            const response = await axios.put(`${this.domain}/rest/api/3/issue/${ticket_id}`, {
                 update: {
                     fixVersions: [
                         {
@@ -47454,14 +47436,10 @@ class API {
                     ],
                 },
             }, { headers: this._headers() });
-            return { success: true };
+            return response.data;
         }
         catch (error) {
-            coreExports.debug(`Error updating issue ${ticket_id}: ${error}`);
-            return {
-                success: false,
-                error: `Error updating issue: ${error instanceof Error ? error.message : String(error)}`,
-            };
+            throw toMoreDescriptiveError(error);
         }
     }
     async loadProject() {
@@ -47568,15 +47546,16 @@ async function run() {
         // Assign JIRA issues to Release
         if (TICKETS !== "") {
             const tickets = TICKETS.split(",");
-            for (const ticket of tickets) {
+            for (const ticketRaw of tickets) {
+                const ticket = ticketRaw.trim();
                 coreExports.info(UPDATING_TICKET(ticket));
                 if (version?.id !== undefined) {
-                    const result = await api.updateIssue(ticket, version.id);
-                    if (result.success) {
+                    try {
+                        await api.updateIssue(ticket, version.id);
                         coreExports.info(TICKET_UPDATED(ticket, version.id));
                     }
-                    else {
-                        coreExports.info(`Failed to update ticket ${ticket}: ${result.error}`);
+                    catch (error) {
+                        coreExports.info(`Failed to update ticket ${ticket}: ${error}`);
                     }
                 }
             }

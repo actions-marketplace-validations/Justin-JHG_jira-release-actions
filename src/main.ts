@@ -101,15 +101,16 @@ export async function run(): Promise<void> {
     if (TICKETS !== "") {
       const tickets = TICKETS.split(",");
 
-      for (const ticket of tickets) {
+      for (const ticketRaw of tickets) {
+        const ticket = ticketRaw.trim();
         info(DebugMessages.UPDATING_TICKET(ticket));
 
         if (version?.id !== undefined) {
-          const result = await api.updateIssue(ticket, version.id);
-          if (result.success) {
+          try {
+            await api.updateIssue(ticket, version.id);
             info(DebugMessages.TICKET_UPDATED(ticket, version.id));
-          } else {
-            info(`Failed to update ticket ${ticket}: ${result.error}`);
+          } catch (error) {
+            info(`Failed to update ticket ${ticket}: ${error}`);
           }
         }
       }

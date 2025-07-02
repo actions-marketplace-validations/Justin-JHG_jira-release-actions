@@ -56,31 +56,10 @@ export class API {
     }
   }
 
-  async updateIssue(
-    ticket_id: string,
-    version_id: string,
-  ): Promise<{ success: boolean; error?: string }> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async updateIssue(ticket_id: string, version_id: string): Promise<any> {
     try {
-      // Check if issue exists first
-      await axios.get(`${this.domain}/rest/api/3/issue/${ticket_id}`, {
-        headers: this._headers(),
-      });
-    } catch (error: unknown) {
-      // If issue doesn't exist, return early without error
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        debug(`Issue ${ticket_id} not found, skipping update`);
-        return { success: false, error: "Issue not found" };
-      }
-      // For other errors during issue check, also return gracefully
-      debug(`Error checking issue ${ticket_id}: ${error}`);
-      return {
-        success: false,
-        error: `Error checking issue: ${error instanceof Error ? error.message : String(error)}`,
-      };
-    }
-
-    try {
-      await axios.put(
+      const response = await axios.put(
         `${this.domain}/rest/api/3/issue/${ticket_id}`,
         {
           update: {
@@ -94,13 +73,9 @@ export class API {
         { headers: this._headers() },
       );
 
-      return { success: true };
+      return response.data;
     } catch (error: unknown) {
-      debug(`Error updating issue ${ticket_id}: ${error}`);
-      return {
-        success: false,
-        error: `Error updating issue: ${error instanceof Error ? error.message : String(error)}`,
-      };
+      throw toMoreDescriptiveError(error);
     }
   }
 
