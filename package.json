@@ -66,5 +66,8 @@
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "*"
+  },
+  "overrides": {
+    "glob": "^13.0.0"
   }
 }
